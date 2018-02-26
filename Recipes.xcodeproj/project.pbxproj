@@ -72,11 +72,11 @@
 			isa = PBXGroup;
 			children = (
 				193280FB20449EF100D580DD /* AppDelegate.swift */,
+				1932810A20449EF100D580DD /* Info.plist */,
 				193281182044C52C00D580DD /* Model */,
 				1932811A2044C55300D580DD /* View */,
 				1932811B2044C56500D580DD /* Controller */,
 				1932811C2044C5C000D580DD /* Assets */,
-				1932811D2044C5EA00D580DD /* Supporting Files */,
 			);
 			path = Recipes;
 			sourceTree = "<group>";
@@ -124,14 +124,6 @@
 				1932810720449EF100D580DD /* LaunchScreen.storyboard */,
 			);
 			path = Assets;
-			sourceTree = "<group>";
-		};
-		1932811D2044C5EA00D580DD /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				1932810A20449EF100D580DD /* Info.plist */,
-			);
-			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		F7ACE3A4B555348F3952E308 /* Pods */ = {
