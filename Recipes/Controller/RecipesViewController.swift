@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import SVProgressHUD
 
 class RecipesViewController: UIViewController {
     
@@ -26,13 +27,13 @@ class RecipesViewController: UIViewController {
         
         if entityIsEmpty() {
             DispatchQueue.main.async{
-//                SVProgressHUD.show(withStatus: "Downloading...")
-//                SVProgressHUD.setDefaultMaskType(.gradient)
+                SVProgressHUD.show(withStatus: "Downloading...")
+                SVProgressHUD.setDefaultMaskType(.gradient)
                 
                 getRecipes { (name, imageURL, calories) in
                     getImageData(url: imageURL, completion: { (data) in
                         self.saveToDatabase(name: name, data: data, calories: calories)
-//                        SVProgressHUD.dismiss()
+                        SVProgressHUD.dismiss()
                     })
                 }
             }
@@ -85,62 +86,7 @@ class RecipesViewController: UIViewController {
     
 }
 
-extension RecipesViewController : UITableViewDelegate, UITableViewDataSource {
-//    func numberOfSections(in collectionView: UICollectionView) -> Int {
-//        if let sections = fetchedResultsController.sections {
-//            return sections.count
-//        }
-//        return 0
-//    }
-    func numberOfSections(in tableView: UITableView) -> Int {
-        if let sections = fetchedResultsController.sections {
-            return sections.count
-        }
-        return 0
-    }
-    
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        if let sections = fetchedResultsController.sections {
-//            let currentSection = sections[section]
-//            return currentSection.numberOfObjects
-//        }
-//        return 0
-//    }
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let sections = fetchedResultsController.sections {
-            let currentSection = sections[section]
-            return currentSection.numberOfObjects
-        }
-        return 0
-    }
-    
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! RecipeCollectionViewCell
-//        let recipe = fetchedResultsController.object(at: indexPath)
-//
-//        cell.image.image = UIImage(data: recipe.imageData!)
-//        cell.image.layer.cornerRadius = 4
-//        cell.image.clipsToBounds = true
-//        cell.name.text = recipe.name
-//        cell.calories.text = "\(recipe.calories) Calories"
-//
-//        return cell
-//    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! RecipeCell
-        let recipe = fetchedResultsController.object(at: indexPath)
-        
-        cell.recipeImage.image = UIImage(data: recipe.imageData!)
-        cell.recipeImage.layer.cornerRadius = 4
-        cell.recipeImage.clipsToBounds = true
-        cell.name.text = recipe.name
-        cell.calories.text = "\(recipe.calories) Calories"
-        
-        
-        return cell
-    }
-}
+
 
 extension RecipesViewController : NSFetchedResultsControllerDelegate {
     
@@ -149,21 +95,17 @@ extension RecipesViewController : NSFetchedResultsControllerDelegate {
         switch type {
         case .insert:
             if let insertIndexPath = newIndexPath{
-//                self.collection.insertItems(at: [insertIndexPath])
                 self.table.insertRows(at: [insertIndexPath], with: .fade)
             }
         case .delete:
             if let deleteIndexpath = indexPath{
-//                self.collection.deleteItems(at: [deleteIndexpath])
                 self.table.deleteRows(at: [deleteIndexpath], with: .fade)
             }
         case .move:
             if let deleteIndexPath = indexPath {
-//                self.collection.deleteItems(at: [deleteIndexPath])
                 self.table.deleteRows(at: [deleteIndexPath], with: .fade)
             }
             if let insertIndexPath = newIndexPath {
-//                self.collection.insertItems(at: [insertIndexPath])
                 self.table.insertRows(at: [insertIndexPath], with: .fade)
             }
         default:
@@ -175,11 +117,9 @@ extension RecipesViewController : NSFetchedResultsControllerDelegate {
         switch type {
         case .insert:
             let sectionIndexSet = NSIndexSet(index: sectionIndex)
-//            self.collection.insertSections(sectionIndexSet as IndexSet)
             self.table.insertSections(sectionIndexSet as IndexSet, with: .fade)
         case .delete:
             let sectionIndexSet = NSIndexSet(index: sectionIndex)
-//            self.collection.deleteSections(sectionIndexSet as IndexSet)
             self.table.deleteSections(sectionIndexSet as IndexSet, with: .fade)
         default:
             print("Nothing")
@@ -191,14 +131,16 @@ extension RecipesViewController : NSFetchedResultsControllerDelegate {
     }
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//        self.collection.numberOfItems(inSection: 0)
         self.table.numberOfRows(inSection: 0)
     }
 }
 
 extension RecipesViewController : UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
+        if searchText.count > 0 {
+            let indexPath = IndexPath(item: 0, section: 0)
+            self.table.scrollToRow(at: indexPath, at: .top, animated: true)
+        }
         fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "name CONTAINS[c] %@", searchText)
         
         do {

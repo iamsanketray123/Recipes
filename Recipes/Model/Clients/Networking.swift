@@ -22,7 +22,7 @@ func getRecipes(completion: @escaping (_ name: String, _ imageURL : String, _ ca
             return
         }
         guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-            print("status code was other than 2xx")
+            print("status code was other than 2xx", (response as? HTTPURLResponse)?.statusCode  ?? "","🥚")
             return
         }
         guard let data = data else {
