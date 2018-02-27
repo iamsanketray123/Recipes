@@ -84,7 +84,7 @@ func getImageData(url: String, completion: @escaping (_ data: Data)->Void) {
             print("error getting data")
             return
         }
-        print("got data from URL🍊")
+        print("got data from URL")
         completion(data)
         
     }
