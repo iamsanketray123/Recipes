@@ -138,8 +138,10 @@ extension RecipesViewController : NSFetchedResultsControllerDelegate {
 extension RecipesViewController : UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.count > 0 {
-            let indexPath = IndexPath(item: 0, section: 0)
-            self.table.scrollToRow(at: indexPath, at: .top, animated: true)
+            if table.numberOfRows(inSection: 0) > 0 {
+                let indexPath = IndexPath(item: 0, section: 0)
+                self.table.scrollToRow(at: indexPath, at: .top, animated: true)
+            }
         }
         fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "name CONTAINS[c] %@", searchText)
         
